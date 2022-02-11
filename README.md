@@ -6,4 +6,4 @@ This is a packer image used for building golang-hello-world application
  - packer validate ubuntu.json
  - packer build -var 'az_client_secret=value' -var 'aws_sub_kid=value'    ubuntu.json
 
-*This was was edited using https://stackedit.io/*
+*This was was edited using https://stackedit.io/*# nexus

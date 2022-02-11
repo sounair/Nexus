@@ -1,0 +1,51 @@
+{
+  "builders": [{
+    "type": "azure-arm",
+
+    "client_id":"6a6f04a6-1390-4f0e-a7f3-4219b50b9ce2",
+    "client_secret":"{{user `az_client_secret`}}",
+    "tenant_id": "ac312fcc-3092-4729-82a8-2d6a19d0f129",
+    "subscription_id":"{{user `aws_sub_kid`}}",
+
+    "managed_image_resource_group_name": "soumya2",
+    "managed_image_name": "nexus_1",
+
+    "os_type": "Linux",
+    "image_publisher": "Canonical",
+    "image_offer": "UbuntuServer",
+    "image_sku": "16.04-LTS",
+
+    "azure_tags": {
+        "dept": "Engineering",
+        "task": "Image deployment"
+    },
+
+    "location": "East US",
+    "vm_size": "Standard_DS2_v2"
+  }],
+  "provisioners": [
+   {
+      "type": "file",
+      "source": "./etc/nexus.service",
+      "destination": "/tmp/nexus.service"                                                                                                                                                                                                       },
+ 
+    {
+      "type": "shell",
+      "execute_command": "chmod +x {{ .Path }}; {{ .Vars }} sudo -E sh '{{ .Path }}'",
+      "scripts":["./bin/installnexus.sh"]
+
+    
+    },
+ 
+{
+      "type": "shell",
+      "inline":["systemctl daemon-reload","systemctl enable nexus.service","/usr/sbin/waagent -force -deprovision+user && export HISTSIZE=0 && sync"],
+      "execute_command":"chmod +x {{ .Path }}; {{ .Vars }} sudo -E sh '{{ .Path }}'"
+
+    
+    }
+    
+    
+
+  ]
+}
